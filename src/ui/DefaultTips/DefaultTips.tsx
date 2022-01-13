@@ -7,10 +7,14 @@ const DefaultTips = () => {
     const [defaultTips, setDefaultTips] = useState(0.3);
 
     useEffect(() => {
-        chrome.storage.sync.get([DEFAULT_TIPS_STORAGE_KEY], function(result) {
-            console.log('Value currently is ' + result.key, result.value);
+        chrome.storage.local.get([DEFAULT_TIPS_STORAGE_KEY], function(result) {
+            console.log('Value currently is ' + result.key, result.value, result);
 
-            setDefaultTips(result.value);
+            const savedDefaultTipsAmount = Number(result[DEFAULT_TIPS_STORAGE_KEY]);
+
+            if (savedDefaultTipsAmount) {
+                setDefaultTips(savedDefaultTipsAmount);
+            }
         });
     }, []);
 
@@ -19,7 +23,7 @@ const DefaultTips = () => {
     }, []);
 
     const handleSave = useCallback(() => {
-        chrome.storage.sync.set({[DEFAULT_TIPS_STORAGE_KEY]: defaultTips}, function() {
+        chrome.storage.local.set({[DEFAULT_TIPS_STORAGE_KEY]: defaultTips}, function() {
             console.log('Value is set to ' + defaultTips);
         });
     }, [defaultTips]);
@@ -29,6 +33,7 @@ const DefaultTips = () => {
             <input
                 type="number"
                 onChange={handleChange}
+                value={defaultTips}
             />
             <button
                 onClick={handleSave}
