@@ -3,6 +3,23 @@ import * as React from "react";
 
 import ButtonContainer from "./ButtonContainer";
 
+const getAnswerId = (answer) => {
+    let node = answer.parentElement
+    let answerId = null
+
+    while (!answerId && node) {
+        const id = node.getAttribute('data-answerid')
+
+        if (id) {
+            answerId = id;
+        }
+
+        node = node.parentElement
+    }
+
+    return answerId
+}
+
 const renderButtons = () => {
     const root = document.createElement('div');
     root.id = 'near-tips-root';
@@ -13,19 +30,29 @@ const renderButtons = () => {
     const mappedAnswers = Array.from(answers).map((answer, index) => {
         const buttonContainer = document.createElement('div')
         buttonContainer.id = `near-tips-button-${index}`
-        answer.appendChild(buttonContainer);
+        answer.appendChild(buttonContainer)
 
         const authorsLinks = answer.parentElement.nextElementSibling.querySelectorAll('.user-info .user-details a')
 
-        const authorIds = Array.from(authorsLinks).map(authorLink => {
-            const splittedLink = authorLink.href.split('/');
+        const { authorIds, authorNicknames } = Array.from(authorsLinks).reduce((acc, authorLink) => {
+            const splittedLink = authorLink.href.split('/')
 
-            return splittedLink[splittedLink.length - 2];
+            acc.authorIds.push(splittedLink[splittedLink.length - 2])
+            acc.authorNicknames.push(splittedLink[splittedLink.length - 1])
+
+            return acc;
+        }, {
+            authorIds: [],
+            authorNicknames: [],
         })
+
+        const answerId = getAnswerId(answer);
 
         return {
             container: buttonContainer,
             authorIds,
+            authorNicknames,
+            answerId,
         }
     })
 
