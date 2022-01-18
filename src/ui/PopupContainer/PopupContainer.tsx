@@ -1,23 +1,26 @@
 import * as React from 'react';
+import { useCallback } from 'react';
 
 import DefaultTips from '../DefaultTips';
-import DepositRead from '../DepositRead';
-import DepositWrite from '../DepositWrite';
+import Deposit from '../Deposit';
 
 import useNearSetup from '../../utils/useNearSetup';
-import { signInFromExtension } from "../../utils/near-utils";
+import { signIn } from "../../utils/near-utils";
 
 const PopupContainer = () => {
     const { wallet, contract } = useNearSetup();
 
+    const handleSignIn = useCallback(() => {
+        signIn(wallet);
+    }, [wallet]);
+
     return wallet?.isSignedIn() ? (
         <div>
             <DefaultTips />
-            <DepositRead wallet={wallet} contract={contract} />
-            <DepositWrite />
+            <Deposit wallet={wallet} contract={contract} />
         </div>
     ) : (
-        <button onClick={signInFromExtension}>Login with Near</button>
+        <button onClick={handleSignIn}>Login with Near</button>
     )
 };
 

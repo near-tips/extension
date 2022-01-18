@@ -1,4 +1,5 @@
 const path = require('path');
+const ReplacePlugin = require('webpack-plugin-replace');
 
 module.exports = {
     mode: "development",
@@ -25,4 +26,15 @@ module.exports = {
             { test: /\.css$/, use: ['style-loader', 'css-loader'] }
         ]
     },
+
+    plugins: [
+        new ReplacePlugin({
+            include: /node_modules\/near-api-js/,
+            'process.env.NODE_ENV': JSON.stringify('production'),
+            patterns: [{
+                regex: /window.location.assign\(newUrl.toString\(\)\);/g,
+                value: 'chrome.tabs.create({ url: newUrl.toString(), active: true });'
+            }],
+        })
+    ]
 };

@@ -19,7 +19,8 @@
     "ts-loader": "^5.3.1",
     "typescript": "^3.1.6",
     "webpack": "^4.26.1",
-    "webpack-cli": "^3.3.12"
+    "webpack-cli": "^3.3.12",
+    "webpack-plugin-replace": "^1.2.0"
   },
   "dependencies": {
     "axios": "^0.24.0",

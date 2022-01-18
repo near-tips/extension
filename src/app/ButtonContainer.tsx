@@ -4,11 +4,10 @@ import * as ReactDOM from "react-dom"
 import axios from 'axios';
 import { utils } from "near-api-js";
 
-import { signIn } from '../utils/near-utils';
+import { signIn, DEFAULT_GAS } from '../utils/near-utils';
 import useNearSetup from '../utils/useNearSetup';
 import Button from './Button';
 
-const DEFAULT_GAS = 300000000000000;
 const DEFAULT_TIPS = 0.3;
 
 const HOST = 'https://api.near-tips.com';

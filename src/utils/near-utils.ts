@@ -1,5 +1,6 @@
-import { keyStores, WalletConnection, connect, Contract, KeyPair } from 'near-api-js';
-import * as queryString from 'query-string';
+import { keyStores, WalletConnection, connect, Contract, utils } from 'near-api-js';
+
+export const DEFAULT_GAS = 300000000000000;
 
 const netConfig = {
     networkId: "testnet",
@@ -22,37 +23,16 @@ export const connectWallet = async () => {
 }
 
 export const signIn = (wallet) => {
-    if (!wallet.isSignedIn()) {
-        wallet.requestSignIn(
-            contractAddress,
-            "Near Tips Extension",
-            window.location.toString(),
-            window.location.toString()
-        );
-    }
-};
-
-export const signInFromExtension = () => {
-    const url = new URL(`${netConfig.walletUrl}/login`);
-
-    const search = {
+    wallet.requestSignIn({
         success_url: window.location.href,
         failure_url: window.location.href,
         contract_id: contractAddress,
-        public_key: KeyPair.fromRandom('ed25519').getPublicKey().toString(),
         methodNames: [
             ...viewMethods,
             ...changeMethods,
         ],
-    }
-
-    url.search = queryString.stringify(search);
-
-    chrome.tabs.create({
-        url: url.toString(),
-        active: true,
-    });
-}
+    })
+};
 
 export const signOut = (wallet) => {
     wallet.signOut();
@@ -72,4 +52,10 @@ export const getContract = (wallet) => {
     }
 
     return null;
+}
+
+export const yoctoNEARToNear = (yoctoNear) => {
+    const normalAmountString = yoctoNear.toLocaleString().split(',').join('');
+
+    return utils.format.formatNearAmount(normalAmountString);
 }
