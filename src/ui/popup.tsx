@@ -7,7 +7,9 @@ import '../styles/popup.css'
 
 const Popup = () => {
     return (
-        <PopupContainer />
+        <div className="popup">
+            <PopupContainer />
+        </div>
     )
 }
 

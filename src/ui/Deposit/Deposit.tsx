@@ -36,17 +36,19 @@ const Deposit = ({ wallet, contract }) => {
 
     return (
         <div>
-            <div>
-                Balance: {readDeposit}
+            <div className="label">
+                Balance: {readDeposit} Ⓝ
             </div>
 
             <div>
                 <input
+                    className="input"
                     type="number"
                     value={writeDeposit}
                     onChange={handleDepositChange}
                 />
                 <button
+                    className="button"
                     onClick={makeDeposit}
                 >
                     Deposit

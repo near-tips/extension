@@ -20,7 +20,12 @@ const PopupContainer = () => {
             <Deposit wallet={wallet} contract={contract} />
         </div>
     ) : (
-        <button onClick={handleSignIn}>Login with Near</button>
+        <button
+            className="login"
+            onClick={handleSignIn}
+        >
+            Login with Near
+        </button>
     )
 };
 

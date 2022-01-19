@@ -1,11 +1,43 @@
 body {
-    min-width: 400px;
-    min-height: 400px;
+    min-width: 350px;
 }
 
-.popup-padded {
+.popup {
     padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 10px;
     padding-right: 10px;
+}
+
+.input {
+    width: 200px;
+    margin-right: 10px;
+    border: 1px solid lightblue;
+    border-radius: 25px;
+    height: 30px;
+    padding: 0 10px;
+}
+
+.label {
+    color: lightgray;
+    margin: 5px;
+}
+
+.button, .login {
+    border: 1px solid lightblue;
+    border-radius: 25px;
+    height: 30px;
+    padding: 0 10px;
+    cursor: pointer;
+    background: white;
+}
+
+.button:hover, .login:hover {
+    background: lightgray;
+}
+
+.login {
+    width: 80%;
+    margin: auto;
+    display: block;
 }

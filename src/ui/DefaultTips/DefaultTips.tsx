@@ -31,11 +31,13 @@ const DefaultTips = () => {
     return (
         <div>
             <input
+                className="input"
                 type="number"
                 onChange={handleChange}
                 value={defaultTips}
             />
             <button
+                className="button"
                 onClick={handleSave}
             >
                 Save
