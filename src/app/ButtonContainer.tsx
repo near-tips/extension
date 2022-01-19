@@ -1,19 +1,29 @@
 import * as React from 'react';
-import { useCallback } from "react"
-import * as ReactDOM from "react-dom"
+import { useCallback, useState, useEffect } from 'react'
+import * as ReactDOM from 'react-dom'
 import axios from 'axios';
-import { utils } from "near-api-js";
+import { utils } from 'near-api-js';
 
 import { signIn, DEFAULT_GAS } from '../utils/near-utils';
+import { DEFAULT_TIPS_STORAGE_KEY, DEFAULT_TIPS } from '../constants';
 import useNearSetup from '../utils/useNearSetup';
 import Button from './Button';
-
-const DEFAULT_TIPS = 0.3;
 
 const HOST = 'https://api.near-tips.com';
 
 const ButtonContainer = ({ answers }) => {
     const { wallet, contract } = useNearSetup();
+    const [tipAmount, setTipAmount] = useState(DEFAULT_TIPS);
+
+    useEffect(() => {
+        chrome.storage.local.get([DEFAULT_TIPS_STORAGE_KEY], result => {
+            const defaultTip = Number(result[DEFAULT_TIPS_STORAGE_KEY]);
+
+            if (defaultTip) {
+                setTipAmount(defaultTip);
+            }
+        })
+    }, []);
 
     const handleClick = useCallback(async ({ authorIds, authorNicknames, answerId }) => {
         if (!wallet.isSignedIn() || !contract.current) {
@@ -44,9 +54,9 @@ const ButtonContainer = ({ answers }) => {
                 nicknames: authorIds,
             },
             DEFAULT_GAS,
-            utils.format.parseNearAmount(`${DEFAULT_TIPS}`),
+            utils.format.parseNearAmount(`${tipAmount}`),
         );
-    }, [wallet]);
+    }, [wallet, tipAmount]);
 
     return answers.map((answer, index) => {
         return ReactDOM.createPortal(

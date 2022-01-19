@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useState, useCallback, useEffect } from 'react';
 
-const DEFAULT_TIPS_STORAGE_KEY = 'default-tips-storage-key';
+import { DEFAULT_TIPS_STORAGE_KEY, DEFAULT_TIPS } from '../../constants';
 
 const DefaultTips = () => {
-    const [defaultTips, setDefaultTips] = useState(0.3);
+    const [defaultTips, setDefaultTips] = useState(DEFAULT_TIPS);
 
     useEffect(() => {
         chrome.storage.local.get([DEFAULT_TIPS_STORAGE_KEY], function(result) {
