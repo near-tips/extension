@@ -78,7 +78,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 DEFAULT_GAS,
                 utils.format.parseNearAmount(message.payload)
             ).then(() => {
-                sendResponse(true);
+                sendResponse(message.payload);
             }).catch((err) => {
                 console.log({err});
             });
@@ -154,6 +154,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             return true;
         }
         case WORKER_METHODS.withdraw_deposit: {
+            contract.withdraw_deposit({
+                withdraw_amount: utils.format.parseNearAmount(message.payload),
+            }).then(() => {
+                sendResponse(message.payload);
+            }).catch((err) => {
+                console.log({err});
+            });
 
             return true;
         }

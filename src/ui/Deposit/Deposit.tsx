@@ -17,8 +17,21 @@ const Deposit = () => {
         chrome.runtime.sendMessage({
             action: WORKER_METHODS.deposit_account,
             payload: writeDeposit,
+        }, (response) => {
+            console.log('deposited successfully: ', response)
+            setReadDeposit(response);
         })
     }, [writeDeposit]);
+
+    const withdrawDeposit = useCallback(() => {
+        chrome.runtime.sendMessage({
+            action: WORKER_METHODS.withdraw_deposit,
+            payload: readDeposit,
+        }, (response) => {
+            console.log('withdraw successfully: ', response)
+            setReadDeposit('0');
+        });
+    }, [readDeposit]);
 
     useEffect(() => {
         chrome.runtime.sendMessage({
@@ -32,7 +45,15 @@ const Deposit = () => {
     return (
         <div>
             <div className="label">
-                Balance: {readDeposit} Ⓝ
+                <span>
+                    Balance: {readDeposit} Ⓝ
+                </span>
+                <button
+                    className="secondaryButton"
+                    onClick={withdrawDeposit}
+                >
+                    Withdraw deposit
+                </button>
             </div>
 
             <div>

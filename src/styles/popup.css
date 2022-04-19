@@ -23,7 +23,7 @@ body {
     margin: 5px;
 }
 
-.button, .login {
+.button, .login, .secondaryButton {
     border: 1px solid lightblue;
     border-radius: 25px;
     height: 30px;
@@ -32,12 +32,20 @@ body {
     background: white;
 }
 
-.button:hover, .login:hover {
+.button:hover, .login:hover, .secondaryButton:hover {
     background: lightgray;
+    color: white;
 }
 
 .login {
     width: 80%;
     margin: auto;
     display: block;
+}
+
+.secondaryButton {
+    margin-left: 10px;
+    height: 20px;
+    color: lightgray;
+    font-size: 10px;
 }
