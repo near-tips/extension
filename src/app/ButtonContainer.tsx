@@ -23,6 +23,18 @@ const ButtonContainer = ({ answers }) => {
                 setTipAmount(defaultTip);
             }
         })
+
+        const listener = (change) => {
+            console.log('default tip amount changed: ', change);
+
+            setTipAmount(change[DEFAULT_TIPS_STORAGE_KEY].newValue);
+        };
+
+        chrome.storage.onChanged.addListener(listener)
+
+        return () => {
+            chrome.storage.onChanged.removeListener(listener);
+        }
     }, []);
 
     const handleClick = useCallback(async ({ authorIds, authorNicknames, answerId }) => {
