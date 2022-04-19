@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { utils } from 'near-api-js';
 
-import { DEFAULT_GAS, yoctoNEARToNear } from '../../utils/near-utils';
+import { WORKER_METHODS } from "../../constants";
 
-const Deposit = ({ wallet, contract }) => {
+const Deposit = () => {
     const [readDeposit, setReadDeposit] = useState('0');
     const [writeDeposit, setWriteDeposit] = useState('3');
 
@@ -15,23 +14,19 @@ const Deposit = ({ wallet, contract }) => {
     const makeDeposit = useCallback(async () => {
         console.log(`Depositing ${writeDeposit}...`);
 
-        const res = await contract.current.deposit_account(
-            {},
-            DEFAULT_GAS,
-            utils.format.parseNearAmount(writeDeposit)
-        );
-
-        console.log({ res })
+        chrome.runtime.sendMessage({
+            action: WORKER_METHODS.deposit_account,
+            payload: writeDeposit,
+        })
     }, [writeDeposit]);
 
     useEffect(() => {
-        const accountId = wallet.account().accountId;
-
-        contract.current.get_deposit_account_id({ account_id: accountId }).then(res => {
-            console.log(`${accountId}: ${yoctoNEARToNear(res)}`);
-
-            setReadDeposit(yoctoNEARToNear(res));
-        });
+        chrome.runtime.sendMessage({
+            action: WORKER_METHODS.get_deposit_account_id,
+        }, (response) => {
+            console.log({ response })
+            setReadDeposit(response);
+        })
     }, []);
 
     return (

@@ -1,31 +1,48 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
 import { connectWallet, getContract } from './near-utils';
 
+import { WORKER_METHODS } from '../constants';
+
 const useNearSetup = () => {
-    const [wallet, setWallet] = useState(null);
-    const contract = useRef(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    useEffect(() => {
-        const setup = async () => {
-            console.log('hey bro');
-            const wallet = await connectWallet();
-
-            setWallet(wallet);
-
-            console.log('Your wallet: ', wallet, wallet.isSignedIn());
-
-            if (wallet.isSignedIn()) {
-                contract.current = getContract(wallet);
-            }
-        }
-
-        setup();
+    const loginFromApp = useCallback(() => {
+        chrome.runtime.sendMessage({
+            action: WORKER_METHODS.nearLogin,
+            payload: window.location.href,
+        }, (response) => {
+            console.log('response', { response })
+            setIsLoggedIn(response);
+        })
     }, []);
 
+    console.log({isLoggedIn})
+    useEffect(() => {
+        console.log('aaa', {
+            ss: location.search,
+        });
+        if (location.search) {
+            chrome.runtime.sendMessage({
+                action: WORKER_METHODS.finishNearLogin,
+                payload: location.search,
+            }, (response) => {
+                setIsLoggedIn(response);
+            })
+            location.search = ''
+        } else {
+            chrome.runtime.sendMessage({
+                action: WORKER_METHODS.getLoggedInStatus,
+            }, (response) => {
+                setIsLoggedIn(response);
+            })
+        }
+    }, [])
+
     return {
-        wallet,
-        contract,
+        isLoggedIn,
+        setIsLoggedIn,
+        loginFromApp,
     }
 };
 

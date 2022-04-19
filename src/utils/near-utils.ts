@@ -1,15 +1,7 @@
 import { keyStores, WalletConnection, connect, Contract, utils } from 'near-api-js';
+import {WORKER_METHODS} from "../constants";
 
 export const DEFAULT_GAS = 300000000000000;
-
-const netConfig = {
-    networkId: "testnet",
-    keyStore: new keyStores.BrowserLocalStorageKeyStore(),
-    nodeUrl: "https://rpc.testnet.near.org",
-    walletUrl: "https://wallet.testnet.near.org",
-    helperUrl: "https://helper.testnet.near.org",
-    explorerUrl: "https://explorer.testnet.near.org",
-};
 
 const contractAddress = 'near-tips.testnet';
 
@@ -17,16 +9,36 @@ const viewMethods = ["get_deposit_account_id", "get_service_id_tips", "get_accou
 const changeMethods = ["deposit_account", "send_tips", "withdraw_deposit", "withdraw_tips", "authentification_commitment", "link_account"];
 
 export const connectWallet = async () => {
+    const netConfig = {
+        networkId: "testnet",
+        keyStore: new keyStores.BrowserLocalStorageKeyStore(),
+        nodeUrl: "https://rpc.testnet.near.org",
+        walletUrl: "https://wallet.testnet.near.org",
+        helperUrl: "https://helper.testnet.near.org",
+        explorerUrl: "https://explorer.testnet.near.org",
+    };
+
     const near = await connect(netConfig);
 
     return new WalletConnection(near);
 }
 
-export const signIn = (wallet) => {
+export const loginFromApp = () => {
+    chrome.runtime.sendMessage({
+        action: WORKER_METHODS.nearLogin,
+        payload: window.location.href,
+    }, (response) => {
+        console.log('response', { response })
+    })
+}
+
+export const signIn = (wallet, redirectUrl) => {
+    console.log(redirectUrl);
+
     wallet.requestSignIn({
-        success_url: window.location.href,
-        failure_url: window.location.href,
-        contract_id: contractAddress,
+        successUrl: redirectUrl,
+        failureUrl: redirectUrl,
+        contractId: contractAddress,
         methodNames: [
             ...viewMethods,
             ...changeMethods,
