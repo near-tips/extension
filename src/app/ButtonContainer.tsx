@@ -84,7 +84,6 @@ const ButtonContainer = ({ answers }) => {
             <Button
                 key={index}
                 onClick={handleClick.bind(null, answer)}
-                isSignedIn={isLoggedIn}
             />,
             answer.container
         )

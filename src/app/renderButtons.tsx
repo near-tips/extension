@@ -30,7 +30,8 @@ const renderButtons = () => {
     const mappedAnswers = Array.from(answers).map((answer, index) => {
         const buttonContainer = document.createElement('div')
         buttonContainer.id = `near-tips-button-${index}`
-        answer.appendChild(buttonContainer)
+
+        answer.insertBefore(buttonContainer, answer.firstChild);
 
         const authorsLinks = answer.parentElement.nextElementSibling.querySelectorAll('.user-info .user-details a')
 

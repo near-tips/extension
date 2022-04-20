@@ -1,18 +1,8 @@
-.button, .signedOutButton {
-    width: 40px;
-    height: 40px;
+.button {
+    width: 10px;
+    height: 0;
     cursor: pointer;
-    margin: 10px 0;
-}
-
-.nearLogin {
-    display: none;
-}
-
-.signedOutButton:hover .payTips {
-    display: none;
-}
-
-.signedOutButton:hover .nearLogin {
-    display: block;
+    position: relative;
+    left: 30px;
+    font-size: 18px;
 }
