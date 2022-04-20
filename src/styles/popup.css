@@ -37,10 +37,14 @@ body {
     color: white;
 }
 
-.login {
+.login, .logout {
     width: 80%;
     margin: auto;
     display: block;
+}
+
+.logout {
+    margin-top: 10px;
 }
 
 .secondaryButton {

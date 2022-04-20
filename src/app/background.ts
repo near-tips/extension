@@ -1,7 +1,7 @@
 import { utils } from 'near-api-js';
 
 import { WORKER_METHODS, LOCAL_STORAGE_KEY } from '../constants';
-import {connectWallet, getContract, signIn, DEFAULT_GAS, yoctoNEARToNear} from '../utils/near-utils';
+import {connectWallet, getContract, signIn, signOut, DEFAULT_GAS, yoctoNEARToNear} from '../utils/near-utils';
 
 import { LocalStorage, Service } from './classes';
 
@@ -67,6 +67,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
             contract = getContract(wallet)
 
+            sendResponse(true);
+            break;
+        case WORKER_METHODS.logout:
+            signOut(wallet);
             sendResponse(true);
             break;
         case WORKER_METHODS.getLoggedInStatus:

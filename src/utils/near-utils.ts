@@ -23,15 +23,6 @@ export const connectWallet = async () => {
     return new WalletConnection(near);
 }
 
-export const loginFromApp = () => {
-    chrome.runtime.sendMessage({
-        action: WORKER_METHODS.nearLogin,
-        payload: window.location.href,
-    }, (response) => {
-        console.log('response', { response })
-    })
-}
-
 export const signIn = (wallet, redirectUrl) => {
     console.log(redirectUrl);
 

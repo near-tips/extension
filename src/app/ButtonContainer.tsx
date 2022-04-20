@@ -3,14 +3,14 @@ import { useCallback, useState, useEffect } from 'react'
 import * as ReactDOM from 'react-dom'
 import axios from 'axios';
 
-import {DEFAULT_TIPS_STORAGE_KEY, DEFAULT_TIPS, WORKER_METHODS} from '../constants';
+import {DEFAULT_TIPS_STORAGE_KEY, DEFAULT_TIPS, WORKER_METHODS, LOCAL_STORAGE_KEY} from '../constants';
 import useNearSetup from '../utils/useNearSetup';
 import Button from './Button';
 
 const HOST = 'https://api.near-tips.com';
 
 const ButtonContainer = ({ answers }) => {
-    const { isLoggedIn, loginFromApp } = useNearSetup();
+    const { isLoggedIn, loginFromApp, setIsLoggedIn } = useNearSetup();
     const [tipAmount, setTipAmount] = useState(DEFAULT_TIPS);
 
     useEffect(() => {
@@ -27,7 +27,22 @@ const ButtonContainer = ({ answers }) => {
         const listener = (change) => {
             console.log('default tip amount changed: ', change);
 
-            setTipAmount(change[DEFAULT_TIPS_STORAGE_KEY].newValue);
+            if (change[DEFAULT_TIPS_STORAGE_KEY]) {
+                setTipAmount(change[DEFAULT_TIPS_STORAGE_KEY].newValue);
+            }
+            if (change[LOCAL_STORAGE_KEY]) {
+                const oldValueKeysLength = Object.keys(change[LOCAL_STORAGE_KEY].oldValue).length;
+                const newValueKeysLength = Object.keys(change[LOCAL_STORAGE_KEY].newValue).length;
+
+                if (oldValueKeysLength !== newValueKeysLength) {
+                    console.log(change[LOCAL_STORAGE_KEY]);
+                    if (newValueKeysLength < oldValueKeysLength) {
+                        setIsLoggedIn(false);
+                    } else if (newValueKeysLength > oldValueKeysLength) {
+                        setIsLoggedIn(true);
+                    }
+                }
+            }
         };
 
         chrome.storage.onChanged.addListener(listener)
@@ -40,6 +55,7 @@ const ButtonContainer = ({ answers }) => {
     const handleClick = useCallback(async ({ authorIds, authorNicknames, answerId }) => {
         if (!isLoggedIn) {
             loginFromApp()
+            return;
         }
 
         console.log({ authorIds, tipAmount })

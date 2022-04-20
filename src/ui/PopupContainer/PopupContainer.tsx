@@ -4,15 +4,20 @@ import DefaultTips from '../DefaultTips';
 import Deposit from '../Deposit';
 
 import useNearSetup from '../../utils/useNearSetup';
-import { loginFromApp } from '../../utils/near-utils';
 
 const PopupContainer = () => {
-    const { isLoggedIn } = useNearSetup();
+    const { isLoggedIn, loginFromApp, logout } = useNearSetup();
 
     return isLoggedIn ? (
         <div>
             <DefaultTips />
             <Deposit />
+            <button
+                className="button logout"
+                onClick={logout}
+            >
+                Logout
+            </button>
         </div>
     ) : (
         <button

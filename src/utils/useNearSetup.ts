@@ -17,6 +17,15 @@ const useNearSetup = () => {
         })
     }, []);
 
+    const logout = useCallback(() => {
+        chrome.runtime.sendMessage({
+            action: WORKER_METHODS.logout,
+        }, () => {
+            console.log('logged out');
+            setIsLoggedIn(false);
+        })
+    }, []);
+
     console.log({isLoggedIn})
     useEffect(() => {
         console.log('aaa', {
@@ -43,6 +52,7 @@ const useNearSetup = () => {
         isLoggedIn,
         setIsLoggedIn,
         loginFromApp,
+        logout,
     }
 };
 

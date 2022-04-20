@@ -14,10 +14,18 @@ export class LocalStorage {
         })
     }
     getItem(key) {
+        console.log({
+            store: this._storage,
+            key,
+        })
         return this._storage[key] || null;
     }
     clear() {
         this._storage = {};
+
+        chrome.storage.local.set({
+            [LOCAL_STORAGE_KEY]: this._storage
+        })
     }
     removeItem(key) {
         delete this._storage[key];
