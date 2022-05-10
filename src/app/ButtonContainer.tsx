@@ -68,14 +68,14 @@ const ButtonContainer = ({ answers }) => {
         }, () => {
             console.log('tips was sent successfully')
 
-            if (false) {
+            // if (false) {
                 axios.post(`${HOST}/v1/notify`, {
                     nicknames: authorNicknames,
                     postId: answerId,
                 }).then(notifyResponse => {
                     console.log({notifyResponse})
                 })
-            }
+            // }
         })
     }, [tipAmount, isLoggedIn]);
 

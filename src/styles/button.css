@@ -3,6 +3,11 @@
     height: 0;
     cursor: pointer;
     position: relative;
-    left: 30px;
+    left: 32px;
     font-size: 18px;
 }
+
+.button:hover {
+    color: black;
+}
+

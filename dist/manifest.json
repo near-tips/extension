@@ -1,8 +1,8 @@
 {
   "name": "Near tips",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "manifest_version": 3,
-  "description": "Use NEAR for tipping somebody in social networks",
+  "description": "Use NEAR for tipping creators in social networks",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -27,8 +27,6 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "icons/near-logo.svg",
-        "icons/teajs-logo.png",
         "popup.html"
       ],
       "matches": ["*://*/*"]

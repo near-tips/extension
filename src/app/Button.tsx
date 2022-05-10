@@ -10,8 +10,8 @@ const Button = ({ onClick }) => {
             onClick={onClick}
         >
             <span
-                className="payTips"
-                title="Pay tips!"
+                className="sendTips"
+                title="Send tips!"
             >
                 Ⓝ
             </span>
