@@ -3,8 +3,9 @@
     height: 0;
     cursor: pointer;
     position: relative;
-    left: 32px;
     font-size: 18px;
+    z-index: 1;
+    top: -8px;
 }
 
 .button:hover {

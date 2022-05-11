@@ -1,6 +1,6 @@
 
 import renderButtons from "./renderButtons";
-import {WORKER_METHODS} from "../constants";
+import 'react-toastify/dist/ReactToastify.css';
 
 const checkReady = setInterval(async () => {
     if (document.readyState === "complete") {
@@ -8,10 +8,6 @@ const checkReady = setInterval(async () => {
         console.log("Near tips are here!")
 
         renderButtons();
-
-        // chrome.runtime.sendMessage({
-        //     message: 'privet from content'
-        // })
     }
 })
 

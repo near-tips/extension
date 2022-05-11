@@ -1,7 +1,8 @@
-import * as ReactDOM from "react-dom";
-import * as React from "react";
+import * as ReactDOM from 'react-dom';
+import * as React from 'react';
+import { ToastContainer } from 'react-toastify';
 
-import ButtonContainer from "./ButtonContainer";
+import ButtonContainer from './ButtonContainer';
 
 const getAnswerId = (answer) => {
     let node = answer.parentElement
@@ -60,7 +61,21 @@ const renderButtons = () => {
     console.log({answers, mappedAnswers});
 
     ReactDOM.render(
-        <ButtonContainer answers={mappedAnswers} />,
+        <>
+            <ButtonContainer answers={mappedAnswers} />
+
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
+        </>,
         root
     );
 }

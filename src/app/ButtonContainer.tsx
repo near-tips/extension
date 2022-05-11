@@ -2,12 +2,31 @@ import * as React from 'react';
 import { useCallback, useState, useEffect } from 'react'
 import * as ReactDOM from 'react-dom'
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 import {DEFAULT_TIPS_STORAGE_KEY, DEFAULT_TIPS, WORKER_METHODS, LOCAL_STORAGE_KEY} from '../constants';
 import useNearSetup from '../utils/useNearSetup';
 import Button from './Button';
 
 const HOST = 'https://api.near-tips.com';
+
+const sendTips = ({ authorIds, tipAmount }) => {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({
+            action: WORKER_METHODS.send_tips,
+            payload: {
+                authorIds,
+                tipAmount,
+            }
+        }, (isSuccess) => {
+            if (isSuccess) {
+                resolve()
+            } else {
+                reject()
+            }
+        });
+    })
+}
 
 const ButtonContainer = ({ answers }) => {
     const { isLoggedIn, loginFromApp, setIsLoggedIn } = useNearSetup();
@@ -59,24 +78,26 @@ const ButtonContainer = ({ answers }) => {
         }
 
         console.log({ authorIds, tipAmount })
-        chrome.runtime.sendMessage({
-            action: WORKER_METHODS.send_tips,
-            payload: {
-                authorIds,
-                tipAmount,
-            }
-        }, () => {
-            console.log('tips was sent successfully')
 
-            // if (false) {
-                axios.post(`${HOST}/v1/notify`, {
-                    nicknames: authorNicknames,
-                    postId: answerId,
-                }).then(notifyResponse => {
-                    console.log({notifyResponse})
-                })
-            // }
+        await toast.promise(
+            () => sendTips({ authorIds, tipAmount }),
+            {
+                pending: `⏳ You're sending ${tipAmount} Ⓝ to ${authorNicknames.join(', ')}`,
+                success: `🦄 Well done! You've sent ${tipAmount} Ⓝ to ${authorNicknames.join(', ')}`,
+                error: `☹️ Something went wrong and your tips weren't sent :(`,
+            }
+        )
+
+        console.log('tips was sent successfully')
+
+        if (false) {
+        axios.post(`${HOST}/v1/notify`, {
+            nicknames: authorNicknames,
+            postId: answerId,
+        }).then(notifyResponse => {
+            console.log({notifyResponse})
         })
+        }
     }, [tipAmount, isLoggedIn]);
 
     return answers.map((answer, index) => {
