@@ -1,11 +1,21 @@
-import { utils } from 'near-api-js';
+import { utils, providers } from 'near-api-js';
 
 import { WORKER_METHODS, LOCAL_STORAGE_KEY } from '../constants';
-import {connectWallet, getContract, signIn, signOut, DEFAULT_GAS, yoctoNEARToNear} from '../utils/near-utils';
+import {
+    connectWallet,
+    getContract,
+    signIn,
+    signOut,
+    DEFAULT_GAS,
+    yoctoNEARToNear,
+    ARCHIVAL_NODE_URL,
+} from '../utils/near-utils';
 
 import { LocalStorage, Service } from './classes';
 
 let wallet, contract
+
+const provider = new providers.JsonRpcProvider(ARCHIVAL_NODE_URL);
 
 const setup = async () => {
     const res = await chrome.storage.local.get(LOCAL_STORAGE_KEY)
@@ -105,7 +115,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             const accountId = wallet.account().accountId;
 
             contract.get_deposit_account_id({account_id: accountId}).then(accountDeposit => {
-                const { tipAmount, authorIds } = message.payload;
+                const { tipAmount, authorIds, callbackUrl } = message.payload;
                 const amount = utils.format.parseNearAmount(tipAmount);
 
                 console.log({ accountDeposit })
@@ -136,14 +146,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     }
                     :
                     () => {
-                        return contract.send_tips(
-                            {
+                        return contract.send_tips({
+                            args: {
                                 user_ids: formattedAuthorIds,
                                 tips: amount,
                             },
-                            DEFAULT_GAS,
+                            gas: DEFAULT_GAS,
                             amount,
-                        )
+                            callbackUrl,
+                        })
                     };
 
                 methodCall().then(() => {
@@ -168,6 +179,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 sendResponse(message.payload);
             }).catch((err) => {
                 console.log({err});
+            });
+
+            return true;
+        }
+        case WORKER_METHODS.checkTransactionStatus: {
+            provider.txStatus(
+                message.payload,
+                wallet.account().accountId
+            ).then((res) => {
+                sendResponse(res);
             });
 
             return true;

@@ -1,16 +1,16 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import * as querystring from 'querystring';
+import { toast } from 'react-toastify';
 
-import { connectWallet, getContract } from './near-utils';
-
-import { WORKER_METHODS } from '../constants';
+import { WORKER_METHODS, FAILURE_MESSAGE } from '../constants';
 
 const useNearSetup = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const loginFromApp = useCallback(() => {
+    const loginFromApp = useCallback((callbackUrl) => {
         chrome.runtime.sendMessage({
             action: WORKER_METHODS.nearLogin,
-            payload: window.location.href,
+            payload: callbackUrl,
         }, (response) => {
             console.log('response', { response })
             setIsLoggedIn(response);
@@ -26,25 +26,50 @@ const useNearSetup = () => {
         })
     }, []);
 
-    console.log({isLoggedIn})
     useEffect(() => {
-        console.log('aaa', {
-            ss: location.search,
-        });
-        if (location.search) {
+        const searchParams = querystring.parse(location.search.slice(1));
+
+        if (searchParams.account_id && searchParams.public_key && searchParams.all_keys) {
+            console.log('finish login: ', searchParams);
+
             chrome.runtime.sendMessage({
                 action: WORKER_METHODS.finishNearLogin,
                 payload: location.search,
             }, (response) => {
                 setIsLoggedIn(response);
             })
-            location.search = ''
         } else {
             chrome.runtime.sendMessage({
                 action: WORKER_METHODS.getLoggedInStatus,
             }, (response) => {
                 setIsLoggedIn(response);
             })
+        }
+
+        if (searchParams.transactionHashes) {
+            console.log('approving transaction: ', searchParams.transactionHashes);
+
+            chrome.runtime.sendMessage({
+                action: WORKER_METHODS.checkTransactionStatus,
+                payload: searchParams.transactionHashes,
+            }, (response) => {
+                // :(
+                const isSuccess = response.status.SuccessValue === '';
+
+                if (isSuccess) {
+                    toast.success(searchParams.successMessage);
+                } else {
+                    toast.error(FAILURE_MESSAGE);
+                }
+            })
+        }
+
+        if (window.location.search) {
+            const newUrl = new URL(window.location.href);
+
+            newUrl.search = '';
+
+            window.history.replaceState(null, null, newUrl.toString());
         }
     }, [])
 

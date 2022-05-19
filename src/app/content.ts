@@ -10,10 +10,3 @@ const checkReady = setInterval(async () => {
         renderButtons();
     }
 })
-
-
-chrome.runtime.onMessage.addListener((message) => {
-    console.log('got back: ', { message })
-
-
-})

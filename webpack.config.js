@@ -33,7 +33,7 @@ module.exports = {
             'process.env.NODE_ENV': JSON.stringify('production'),
             patterns: [{
                 regex: /window.location.assign\(newUrl.toString\(\)\);/g,
-                value: 'chrome.tabs.create({ url: newUrl.toString(), active: true });'
+                value: 'chrome.tabs.update({ url: newUrl.toString() });'
             }],
         })
     ]

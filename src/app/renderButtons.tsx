@@ -58,7 +58,7 @@ const renderButtons = () => {
         }
     })
 
-    console.log({answers, mappedAnswers});
+    // console.log({answers, mappedAnswers});
 
     ReactDOM.render(
         <>

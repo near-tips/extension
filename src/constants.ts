@@ -8,6 +8,8 @@ export const WORKER_METHODS = {
 
     getLoggedInStatus: 'GET_LOGGED_IN_STATUS',
 
+    checkTransactionStatus: 'CHECK_TRANSACTION_STATUS',
+
     // SC methods
     get_deposit_account_id: 'get_deposit_account_id',
     deposit_account: 'deposit_account',
@@ -16,3 +18,5 @@ export const WORKER_METHODS = {
 }
 
 export const LOCAL_STORAGE_KEY = 'local_storage_key'
+
+export const FAILURE_MESSAGE = '☹️ Something went wrong and your tips weren\'t sent :(';

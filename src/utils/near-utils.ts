@@ -6,7 +6,9 @@ export const DEFAULT_GAS = 300000000000000;
 const contractAddress = 'near-tips.testnet';
 
 const viewMethods = ["get_deposit_account_id", "get_service_id_tips", "get_account_id_tips"];
-const changeMethods = ["deposit_account", "send_tips", "withdraw_deposit", "withdraw_tips", "authentification_commitment", "link_account"];
+const changeMethods = ["deposit_account", "send_tips", "withdraw_deposit", "withdraw_tips", "link_account"];
+
+export const ARCHIVAL_NODE_URL = 'https://archival-rpc.testnet.near.org';
 
 export const connectWallet = async () => {
     const netConfig = {

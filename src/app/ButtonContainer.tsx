@@ -4,19 +4,21 @@ import * as ReactDOM from 'react-dom'
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-import {DEFAULT_TIPS_STORAGE_KEY, DEFAULT_TIPS, WORKER_METHODS, LOCAL_STORAGE_KEY} from '../constants';
+import { DEFAULT_TIPS_STORAGE_KEY, DEFAULT_TIPS, WORKER_METHODS, LOCAL_STORAGE_KEY, FAILURE_MESSAGE } from '../constants';
 import useNearSetup from '../utils/useNearSetup';
 import Button from './Button';
+import * as queryString from "querystring";
 
 const HOST = 'https://api.near-tips.com';
 
-const sendTips = ({ authorIds, tipAmount }) => {
+const sendTips = ({ authorIds, tipAmount, callbackUrl }) => {
     return new Promise((resolve, reject) => {
         chrome.runtime.sendMessage({
             action: WORKER_METHODS.send_tips,
             payload: {
                 authorIds,
                 tipAmount,
+                callbackUrl,
             }
         }, (isSuccess) => {
             if (isSuccess) {
@@ -34,11 +36,10 @@ const ButtonContainer = ({ answers }) => {
 
     useEffect(() => {
         chrome.storage.local.get([DEFAULT_TIPS_STORAGE_KEY], result => {
-            console.log('default tip: ', { result })
             const defaultTip = result[DEFAULT_TIPS_STORAGE_KEY];
+            console.log('default tip: ', defaultTip);
 
             if (defaultTip) {
-                console.log({ defaultTip })
                 setTipAmount(defaultTip);
             }
         })
@@ -72,32 +73,46 @@ const ButtonContainer = ({ answers }) => {
     }, []);
 
     const handleClick = useCallback(async ({ authorIds, authorNicknames, answerId }) => {
+        const callbackUrl = new URL(window.location.toString());
+
+        if (!callbackUrl.hash) {
+            callbackUrl.hash = answerId;
+        }
+
         if (!isLoggedIn) {
-            loginFromApp()
+            loginFromApp(callbackUrl)
             return;
         }
 
         console.log({ authorIds, tipAmount })
 
+        const successMessage = `🦄 Well done! You've sent ${tipAmount} Ⓝ to ${authorNicknames.join(', ')}`;
+        const pendingMessage = `⏳ You're sending ${tipAmount} Ⓝ to ${authorNicknames.join(', ')}`;
+
+        callbackUrl.search = queryString.stringify({
+            successMessage,
+            answerId,
+        });
+
         await toast.promise(
-            () => sendTips({ authorIds, tipAmount }),
+            () => sendTips({ authorIds, tipAmount, callbackUrl: callbackUrl }),
             {
-                pending: `⏳ You're sending ${tipAmount} Ⓝ to ${authorNicknames.join(', ')}`,
-                success: `🦄 Well done! You've sent ${tipAmount} Ⓝ to ${authorNicknames.join(', ')}`,
-                error: `☹️ Something went wrong and your tips weren't sent :(`,
+                pending: pendingMessage,
+                success: successMessage,
+                error: FAILURE_MESSAGE,
             }
         )
 
         console.log('tips was sent successfully')
 
-        if (false) {
         axios.post(`${HOST}/v1/notify`, {
             nicknames: authorNicknames,
             postId: answerId,
         }).then(notifyResponse => {
             console.log({notifyResponse})
+        }).catch(err => {
+            console.error(err);
         })
-        }
     }, [tipAmount, isLoggedIn]);
 
     return answers.map((answer, index) => {
