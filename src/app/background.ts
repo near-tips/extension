@@ -80,6 +80,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             break;
         case WORKER_METHODS.logout:
             signOut(wallet);
+            localStorage.clear();
             sendResponse(true);
             break;
         case WORKER_METHODS.getLoggedInStatus:
