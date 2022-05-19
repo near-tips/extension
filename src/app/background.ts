@@ -1,6 +1,6 @@
 import { utils, providers } from 'near-api-js';
 
-import { WORKER_METHODS, LOCAL_STORAGE_KEY } from '../constants';
+import { WORKER_METHODS, LOCAL_STORAGE_KEY, ARCHIVAL_NODE_URL } from '../constants';
 import {
     connectWallet,
     getContract,
@@ -8,7 +8,6 @@ import {
     signOut,
     DEFAULT_GAS,
     yoctoNEARToNear,
-    ARCHIVAL_NODE_URL,
 } from '../utils/near-utils';
 
 import { LocalStorage, Service } from './classes';

@@ -2,7 +2,9 @@ import { useEffect, useState, useCallback } from 'react';
 import * as querystring from 'querystring';
 import { toast } from 'react-toastify';
 
-import { WORKER_METHODS, FAILURE_MESSAGE } from '../constants';
+import notify from '../app/notify';
+import { WORKER_METHODS } from '../constants';
+import { failureMessage, successMessage } from './messages';
 
 const useNearSetup = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -28,8 +30,12 @@ const useNearSetup = () => {
 
     useEffect(() => {
         const searchParams = querystring.parse(location.search.slice(1));
+        const {
+            account_id, public_key, all_keys,
+            transactionHashes, nicknames, tipAmount, answerId,
+        } = searchParams;
 
-        if (searchParams.account_id && searchParams.public_key && searchParams.all_keys) {
+        if (account_id && public_key && all_keys) {
             console.log('finish login: ', searchParams);
 
             chrome.runtime.sendMessage({
@@ -46,20 +52,23 @@ const useNearSetup = () => {
             })
         }
 
-        if (searchParams.transactionHashes) {
-            console.log('approving transaction: ', searchParams.transactionHashes);
+        if (transactionHashes) {
+            console.log('approving transaction: ', searchParams);
 
             chrome.runtime.sendMessage({
                 action: WORKER_METHODS.checkTransactionStatus,
-                payload: searchParams.transactionHashes,
+                payload: transactionHashes,
             }, (response) => {
                 // :(
                 const isSuccess = response.status.SuccessValue === '';
 
                 if (isSuccess) {
-                    toast.success(searchParams.successMessage);
+                    const formattedNicknames = Array.isArray(nicknames) ? nicknames : [nicknames];
+
+                    notify(formattedNicknames, answerId);
+                    toast.success(successMessage(tipAmount, formattedNicknames));
                 } else {
-                    toast.error(FAILURE_MESSAGE);
+                    toast.error(failureMessage);
                 }
             })
         }

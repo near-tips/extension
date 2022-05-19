@@ -1,3 +1,13 @@
+export const CONTRACT_ADDRESS = 'near-tips.testnet';
+export const NETWORK_ID = 'testnet';
+export const NODE_URL = 'https://rpc.testnet.near.org';
+export const ARCHIVAL_NODE_URL = 'https://archival-rpc.testnet.near.org';
+export const WALLET_URL = 'https://wallet.testnet.near.org';
+export const HELPER_URL = 'https://helper.testnet.near.org';
+export const EXPLORER_URL = 'https://explorer.testnet.near.org';
+
+export const HOST = 'https://api.near-tips.com';
+
 export const DEFAULT_TIPS_STORAGE_KEY = 'default-tips-storage-key';
 export const DEFAULT_TIPS = '0.3';
 
@@ -18,5 +28,3 @@ export const WORKER_METHODS = {
 }
 
 export const LOCAL_STORAGE_KEY = 'local_storage_key'
-
-export const FAILURE_MESSAGE = '☹️ Something went wrong and your tips weren\'t sent :(';

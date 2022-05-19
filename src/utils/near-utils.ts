@@ -1,23 +1,26 @@
 import { keyStores, WalletConnection, connect, Contract, utils } from 'near-api-js';
-import {WORKER_METHODS} from "../constants";
+import {
+    CONTRACT_ADDRESS,
+    NETWORK_ID,
+    NODE_URL,
+    WALLET_URL,
+    HELPER_URL,
+    EXPLORER_URL,
+} from '../constants';
 
 export const DEFAULT_GAS = 300000000000000;
-
-const contractAddress = 'near-tips.testnet';
 
 const viewMethods = ["get_deposit_account_id", "get_service_id_tips", "get_account_id_tips"];
 const changeMethods = ["deposit_account", "send_tips", "withdraw_deposit", "withdraw_tips", "link_account"];
 
-export const ARCHIVAL_NODE_URL = 'https://archival-rpc.testnet.near.org';
-
 export const connectWallet = async () => {
     const netConfig = {
-        networkId: "testnet",
+        networkId: NETWORK_ID,
         keyStore: new keyStores.BrowserLocalStorageKeyStore(),
-        nodeUrl: "https://rpc.testnet.near.org",
-        walletUrl: "https://wallet.testnet.near.org",
-        helperUrl: "https://helper.testnet.near.org",
-        explorerUrl: "https://explorer.testnet.near.org",
+        nodeUrl: NODE_URL,
+        walletUrl: WALLET_URL,
+        helperUrl: HELPER_URL,
+        explorerUrl: EXPLORER_URL,
     };
 
     const near = await connect(netConfig);
@@ -31,7 +34,7 @@ export const signIn = (wallet, redirectUrl) => {
     wallet.requestSignIn({
         successUrl: redirectUrl,
         failureUrl: redirectUrl,
-        contractId: contractAddress,
+        contractId: CONTRACT_ADDRESS,
         methodNames: [
             ...viewMethods,
             ...changeMethods,
@@ -47,7 +50,7 @@ export const getContract = (wallet) => {
     if (wallet.isSignedIn()) {
         return new Contract(
             wallet.account(),
-            contractAddress,
+            CONTRACT_ADDRESS,
             {
                 viewMethods,
                 changeMethods,
