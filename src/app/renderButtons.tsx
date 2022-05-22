@@ -3,6 +3,7 @@ import * as React from 'react';
 import { ToastContainer } from 'react-toastify';
 
 import ButtonContainer from './ButtonContainer';
+import ErrorBoundary from './ErrorBoundary';
 
 const getAnswerId = (answer) => {
     let node = answer.parentElement
@@ -61,7 +62,7 @@ const renderButtons = () => {
     // console.log({answers, mappedAnswers});
 
     ReactDOM.render(
-        <>
+        <ErrorBoundary>
             <ButtonContainer answers={mappedAnswers} />
 
             <ToastContainer
@@ -75,7 +76,7 @@ const renderButtons = () => {
                 draggable
                 pauseOnHover
             />
-        </>,
+        </ErrorBoundary>,
         root
     );
 }

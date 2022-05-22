@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import { HOST } from '../constants';
+import logger from '../utils/logger';
 
 export default async (nicknames, postId) => {
     try {
@@ -9,10 +10,10 @@ export default async (nicknames, postId) => {
             postId,
         })
 
-        console.log({ notifyResponse })
+        logger.log({ notifyResponse })
 
         return notifyResponse;
     } catch (err) {
-        console.error(err);
+        logger.error(err);
     }
 }

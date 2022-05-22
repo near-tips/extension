@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState, useCallback, useEffect } from 'react';
 
+import logger from '../../utils/logger';
 import { DEFAULT_TIPS_STORAGE_KEY, DEFAULT_TIPS } from '../../constants';
 
 const DefaultTips = () => {
@@ -8,7 +9,7 @@ const DefaultTips = () => {
 
     useEffect(() => {
         chrome.storage.local.get([DEFAULT_TIPS_STORAGE_KEY], function(result) {
-            console.log('Value currently is ' + result.key, result.value, result);
+            logger.log('Value currently is ' + result.key, result.value, result);
 
             const savedDefaultTipsAmount = Number(result[DEFAULT_TIPS_STORAGE_KEY]);
 
@@ -24,7 +25,7 @@ const DefaultTips = () => {
 
     const handleSave = useCallback(() => {
         chrome.storage.local.set({[DEFAULT_TIPS_STORAGE_KEY]: defaultTips}, function() {
-            console.log('Value is set to ' + defaultTips);
+            logger.log('Value is set to ' + defaultTips);
         });
     }, [defaultTips]);
 

@@ -7,6 +7,7 @@ import * as queryString from 'querystring';
 import { successMessage, failureMessage, pendingMessage } from '../utils/messages';
 import { DEFAULT_TIPS_STORAGE_KEY, DEFAULT_TIPS, WORKER_METHODS, LOCAL_STORAGE_KEY } from '../constants';
 import useNearSetup from '../utils/useNearSetup';
+import logger from '../utils/logger';
 import Button from './Button';
 import notify from './notify';
 
@@ -36,7 +37,7 @@ const ButtonContainer = ({ answers }) => {
     useEffect(() => {
         chrome.storage.local.get([DEFAULT_TIPS_STORAGE_KEY], result => {
             const defaultTip = result[DEFAULT_TIPS_STORAGE_KEY];
-            console.log('default tip: ', defaultTip);
+            logger.log('default tip: ', defaultTip);
 
             if (defaultTip) {
                 setTipAmount(defaultTip);
@@ -44,7 +45,7 @@ const ButtonContainer = ({ answers }) => {
         })
 
         const listener = (change) => {
-            console.log('default tip amount changed: ', change);
+            logger.log('default tip amount changed: ', change);
 
             if (change[DEFAULT_TIPS_STORAGE_KEY]) {
                 setTipAmount(change[DEFAULT_TIPS_STORAGE_KEY].newValue);
@@ -54,7 +55,7 @@ const ButtonContainer = ({ answers }) => {
                 const newValueKeysLength = Object.keys(change[LOCAL_STORAGE_KEY].newValue).length;
 
                 if (oldValueKeysLength !== newValueKeysLength) {
-                    console.log(change[LOCAL_STORAGE_KEY]);
+                    logger.log(change[LOCAL_STORAGE_KEY]);
                     if (newValueKeysLength < oldValueKeysLength) {
                         setIsLoggedIn(false);
                     } else if (newValueKeysLength > oldValueKeysLength) {
@@ -83,7 +84,7 @@ const ButtonContainer = ({ answers }) => {
             return;
         }
 
-        console.log({ authorIds, tipAmount })
+        logger.log({ authorIds, tipAmount })
 
         callbackUrl.search = queryString.stringify({
             tipAmount,
@@ -97,7 +98,7 @@ const ButtonContainer = ({ answers }) => {
                 pending: pendingMessage(tipAmount, authorNicknames),
                 success: {
                     render() {
-                        console.log('tips was sent successfully');
+                        logger.log('tips was sent successfully');
 
                         notify(authorNicknames, answerId);
 

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 
 import { WORKER_METHODS } from "../../constants";
+import logger from '../../utils/logger';
 
 const Deposit = () => {
     const [readDeposit, setReadDeposit] = useState('0');
@@ -12,7 +13,7 @@ const Deposit = () => {
     }, []);
 
     const makeDeposit = useCallback(async () => {
-        console.log(`Depositing ${writeDeposit}...`);
+        logger.log(`Depositing ${writeDeposit}...`);
 
         chrome.runtime.sendMessage({
             action: WORKER_METHODS.deposit_account,
@@ -21,7 +22,7 @@ const Deposit = () => {
                 callbackUrl: window.location.href,
             },
         }, (response) => {
-            console.log('deposited successfully: ', response)
+            logger.log('deposited successfully: ', response);
             setReadDeposit(response);
         })
     }, [writeDeposit]);
@@ -31,7 +32,7 @@ const Deposit = () => {
             action: WORKER_METHODS.withdraw_deposit,
             payload: readDeposit,
         }, (response) => {
-            console.log('withdraw successfully: ', response)
+            logger.log('withdraw successfully: ', response);
             setReadDeposit('0');
         });
     }, [readDeposit]);
@@ -40,7 +41,7 @@ const Deposit = () => {
         chrome.runtime.sendMessage({
             action: WORKER_METHODS.get_deposit_account_id,
         }, (response) => {
-            console.log({ response })
+            logger.log({ response })
             setReadDeposit(response);
         })
     }, []);

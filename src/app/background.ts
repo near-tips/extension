@@ -9,6 +9,7 @@ import {
     DEFAULT_GAS,
     yoctoNEARToNear,
 } from '../utils/near-utils';
+import logger from '../utils/logger';
 
 import { LocalStorage, Service } from './classes';
 
@@ -20,7 +21,7 @@ const setup = async () => {
     const res = await chrome.storage.local.get(LOCAL_STORAGE_KEY)
 
     const storage = res[LOCAL_STORAGE_KEY]
-    console.log({ storage })
+    logger.log({ storage })
 
     const localStorage = new LocalStorage(storage)
     const location = new URL(globalThis.location)
@@ -38,25 +39,25 @@ const setup = async () => {
 
     wallet = await connectWallet()
 
-    console.log('set contract', wallet.isSignedIn())
+    logger.log('set contract', wallet.isSignedIn())
     if (wallet.isSignedIn()) {
         contract = getContract(wallet)
     }
 
-    console.log({wallet});
+    logger.log({wallet});
 }
 
 setup()
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    console.log("Background got a message!", message)
+    logger.log("Background got a message!", message)
 
     switch (message.action) {
         case WORKER_METHODS.nearLogin:
             const isSignedIn = wallet.isSignedIn();
             const redirectUrl = message.payload;
 
-            console.log({ isSignedIn })
+            logger.log({ isSignedIn })
             if (!isSignedIn) {
                 signIn(wallet, redirectUrl);
                 return;
@@ -66,13 +67,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             break;
 
         case WORKER_METHODS.finishNearLogin:
-            console.log('payload: ', message.payload);
+            logger.log('payload: ', message.payload);
             window.location.href += message.payload;
-            console.log('new href: ', window.location.href);
+            logger.log('new href: ', window.location.href);
 
             wallet._completeSignInWithAccessKey();
 
-            console.log('isSignedIn: ', wallet.isSignedIn());
+            logger.log('isSignedIn: ', wallet.isSignedIn());
 
             contract = getContract(wallet)
 
@@ -87,7 +88,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             sendResponse(wallet.isSignedIn());
             break;
         case WORKER_METHODS.deposit_account:
-            console.log(window.location.href);
             contract.deposit_account({
                 args: {},
                 gas: DEFAULT_GAS,
@@ -96,7 +96,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             }).then(() => {
                 sendResponse(message.payload);
             }).catch((err) => {
-                console.log({err});
+                logger.error({ err });
             });
 
             return true;
@@ -104,7 +104,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             const accountId = wallet.account().accountId;
 
             contract.get_deposit_account_id({account_id: accountId}).then(accountDeposit => {
-                console.log(`${accountId}: ${yoctoNEARToNear(accountDeposit)}`);
+                logger.log(`${accountId}: ${yoctoNEARToNear(accountDeposit)}`);
 
                 sendResponse(yoctoNEARToNear(accountDeposit))
             })
@@ -120,7 +120,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 const { tipAmount, authorIds, callbackUrl } = message.payload;
                 const amount = utils.format.parseNearAmount(tipAmount);
 
-                console.log({ accountDeposit })
+                logger.log({ accountDeposit })
 
                 const formattedAuthorIds = authorIds.map(userId => {
                     return {
@@ -129,7 +129,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     }
                 });
 
-                console.log({
+                logger.log({
                     a: yoctoNEARToNear(accountDeposit),
                     accountDeposit,
                     amount,
@@ -160,15 +160,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     };
 
                 methodCall().then(() => {
-                    console.log('tips was sent');
+                    logger.log('tips was sent');
 
                     sendResponse(true);
                 }).catch(err => {
-                    console.log({ err })
+                    logger.error({ err });
                     sendResponse(false);
                 })
             }).catch((err) => {
-                console.log({err})
+                logger.error('mystery?', { err });
                 sendResponse(false);
             })
 
@@ -180,7 +180,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             }).then(() => {
                 sendResponse(message.payload);
             }).catch((err) => {
-                console.log({err});
+                logger.error({err});
             });
 
             return true;
@@ -196,6 +196,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             return true;
         }
         default:
-            console.log('unknown worker method')
+            logger.error('unknown worker method')
     }
 })

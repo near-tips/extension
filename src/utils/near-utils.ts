@@ -1,4 +1,7 @@
 import { keyStores, WalletConnection, connect, Contract, utils } from 'near-api-js';
+
+import logger from './logger';
+
 import {
     CONTRACT_ADDRESS,
     NETWORK_ID,
@@ -29,7 +32,7 @@ export const connectWallet = async () => {
 }
 
 export const signIn = (wallet, redirectUrl) => {
-    console.log(redirectUrl);
+    logger.log(redirectUrl);
 
     wallet.requestSignIn({
         successUrl: redirectUrl,

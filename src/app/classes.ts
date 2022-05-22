@@ -1,4 +1,5 @@
 import { LOCAL_STORAGE_KEY } from "../constants";
+import logger from '../utils/logger';
 
 export class LocalStorage {
     _storage = {}
@@ -14,7 +15,7 @@ export class LocalStorage {
         })
     }
     getItem(key) {
-        console.log({
+        logger.log({
             store: this._storage,
             key,
         })

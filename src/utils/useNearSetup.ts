@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import * as querystring from 'querystring';
 import { toast } from 'react-toastify';
 
+import logger from '../utils/logger';
 import notify from '../app/notify';
 import { WORKER_METHODS } from '../constants';
 import { failureMessage, successMessage } from './messages';
@@ -14,7 +15,7 @@ const useNearSetup = () => {
             action: WORKER_METHODS.nearLogin,
             payload: callbackUrl,
         }, (response) => {
-            console.log('response', { response })
+            logger.log('response', { response })
             setIsLoggedIn(response);
         })
     }, []);
@@ -23,7 +24,7 @@ const useNearSetup = () => {
         chrome.runtime.sendMessage({
             action: WORKER_METHODS.logout,
         }, () => {
-            console.log('logged out');
+            logger.log('logged out');
             setIsLoggedIn(false);
         })
     }, []);
@@ -36,7 +37,7 @@ const useNearSetup = () => {
         } = searchParams;
 
         if (account_id && public_key && all_keys) {
-            console.log('finish login: ', searchParams);
+            logger.log('finish login: ', searchParams);
 
             chrome.runtime.sendMessage({
                 action: WORKER_METHODS.finishNearLogin,
@@ -53,7 +54,7 @@ const useNearSetup = () => {
         }
 
         if (transactionHashes && answerId && nicknames) {
-            console.log('approving transaction: ', searchParams);
+            logger.log('approving transaction: ', searchParams);
 
             chrome.runtime.sendMessage({
                 action: WORKER_METHODS.checkTransactionStatus,
@@ -68,6 +69,7 @@ const useNearSetup = () => {
                     notify(formattedNicknames, answerId);
                     toast.success(successMessage(tipAmount, formattedNicknames));
                 } else {
+                    logger.error(failureMessage, { nicknames, answerId, transactionHashes, tipAmount });
                     toast.error(failureMessage);
                 }
             })
