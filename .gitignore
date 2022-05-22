@@ -2,3 +2,5 @@
 dist/js/*
 node_modules/
 dist.pem
+dev
+build

@@ -1,0 +1,35 @@
+{
+  "name": "NearTips",
+  "version": "0.2.0",
+  "manifest_version": 3,
+  "description": "Use NEAR for tipping creators in social networks",
+  "icons": {
+    "16": "img/icon-16.png",
+    "48": "img/icon-48.png",
+    "128": "img/icon-128.png"
+  },
+  "action": {
+    "default_title": "Near Tips",
+    "default_popup": "popup.html"
+  },
+  "options_page": "options.html",
+  "background": {
+    "service_worker": "background.bundle.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.stackoverflow.com/*"],
+      "js": ["contentScript.bundle.js"]
+    }
+  ],
+  "permissions": [
+    "storage",
+    "tabs"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["popup.html"],
+      "matches": ["*://*/*"]
+    }
+  ]
+}

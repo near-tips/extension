@@ -1,0 +1,49 @@
+.popup {
+  padding: 10px;
+  min-width: 350px;
+}
+
+.input {
+  width: 200px;
+  margin-right: 10px;
+  border: 1px solid lightblue;
+  border-radius: 25px;
+  height: 30px;
+  padding: 0 10px;
+}
+
+.label {
+  color: lightgray;
+  margin: 5px;
+}
+
+.button, .login, .secondaryButton {
+  border: 1px solid lightblue;
+  border-radius: 25px;
+  height: 30px;
+  padding: 0 10px;
+  cursor: pointer;
+  background: white;
+}
+
+.button:hover, .login:hover, .secondaryButton:hover {
+  background: lightgray;
+  color: white;
+}
+
+.login, .logout {
+  width: 80%;
+  margin: auto;
+  display: block;
+}
+
+.logout {
+  margin-top: 10px;
+}
+
+.secondaryButton {
+  margin-left: 10px;
+  height: 20px;
+  color: lightgray;
+  font-size: 10px;
+}

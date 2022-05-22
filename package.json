@@ -1,34 +1,47 @@
 {
-  "name": "neartips",
+  "name": "extension",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "NODE_ENV=development webpack",
-    "build:prod": "NODE_ENV=production webapck && cp -R ./dist/ ../near-tips/ && ~/../../Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --pack-extension=./dist --pack-extension-key=./dist.pem && cp ./dist.crx ../near-tips && zip -r near-tips.zip ../near-tips"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "BSD-3-Clause",
-  "devDependencies": {
-    "@types/chrome": "0.0.75",
-    "@types/react": "^16.7.8",
-    "@types/react-dom": "^16.0.11",
-    "css-loader": "^1.0.1",
-    "style-loader": "^0.23.1",
-    "ts-loader": "^5.3.1",
-    "typescript": "^3.1.6",
-    "webpack": "^4.26.1",
-    "webpack-cli": "^3.3.12",
-    "webpack-plugin-replace": "^1.2.0"
-  },
   "dependencies": {
-    "axios": "^0.24.0",
-    "borsh": "^0.7.0",
-    "near-api-js": "^0.44.0",
-    "react": "^16.6.3",
-    "react-dom": "^16.6.3",
-    "react-toastify": "^9.0.1"
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
+    "axios": "^0.27.2",
+    "classnames": "^2.3.1",
+    "near-api-js": "^0.44.2",
+    "react": "^18.1.0",
+    "react-browser-extension-scripts": "4.0.10",
+    "react-dom": "^18.1.0",
+    "react-toastify": "^9.0.1",
+    "sass": "^1.52.1",
+    "web-vitals": "^1.1.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "build:prod": "react-scripts build && cp -R ./dist/ ../near-tips/ && ~/../../Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --pack-extension=./dist --pack-extension-key=./dist.pem && cp ./dist.crx ../near-tips && zip -r near-tips.zip ../near-tips",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ],
+    "rules": {
+      "no-undef": "off",
+      "no-restricted-globals": "off"
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
