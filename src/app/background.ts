@@ -87,11 +87,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             sendResponse(wallet.isSignedIn());
             break;
         case WORKER_METHODS.deposit_account:
-            contract.deposit_account(
-                {},
-                DEFAULT_GAS,
-                utils.format.parseNearAmount(message.payload)
-            ).then(() => {
+            console.log(window.location.href);
+            contract.deposit_account({
+                args: {},
+                gas: DEFAULT_GAS,
+                amount: utils.format.parseNearAmount(message.payload.amount),
+                callbackUrl: message.payload.callbackUrl,
+            }).then(() => {
                 sendResponse(message.payload);
             }).catch((err) => {
                 console.log({err});
@@ -114,7 +116,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             // 2. - deposit is not enough and make transaction directly
             const accountId = wallet.account().accountId;
 
-            contract.get_deposit_account_id({account_id: accountId}).then(accountDeposit => {
+            contract.get_deposit_account_id({ account_id: accountId }).then(accountDeposit => {
                 const { tipAmount, authorIds, callbackUrl } = message.payload;
                 const amount = utils.format.parseNearAmount(tipAmount);
 

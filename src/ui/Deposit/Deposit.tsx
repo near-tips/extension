@@ -16,7 +16,10 @@ const Deposit = () => {
 
         chrome.runtime.sendMessage({
             action: WORKER_METHODS.deposit_account,
-            payload: writeDeposit,
+            payload: {
+                amount: writeDeposit,
+                callbackUrl: window.location.href,
+            },
         }, (response) => {
             console.log('deposited successfully: ', response)
             setReadDeposit(response);

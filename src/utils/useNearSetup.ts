@@ -52,7 +52,7 @@ const useNearSetup = () => {
             })
         }
 
-        if (transactionHashes) {
+        if (transactionHashes && answerId && nicknames) {
             console.log('approving transaction: ', searchParams);
 
             chrome.runtime.sendMessage({
