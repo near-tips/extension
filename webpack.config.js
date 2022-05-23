@@ -2,13 +2,13 @@ const path = require('path');
 const ReplacePlugin = require('webpack-plugin-replace');
 
 module.exports = {
-    mode: "development",
+    mode: process.env.NODE_ENV,
     devtool: "inline-source-map",
 
     entry: {
-        content: './src/app/content.ts',
-        background: './src/app/background.ts',
-        popup: './src/ui/popup.tsx',
+        content: './src/app/content.js',
+        background: './src/app/background.js',
+        popup: './src/ui/popup.jsx',
     },
 
     output: {
@@ -17,12 +17,21 @@ module.exports = {
     },
 
     resolve: {
-        extensions: [".ts", ".tsx", ".js"]
+        extensions: [".js", ".jsx"]
     },
 
     module: {
         rules: [
-            { test: /\.tsx?$/, loader: "ts-loader" },
+            {
+                test: /\.jsx?$/,
+                exclude: /(node_modules)/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env', '@babel/preset-react']
+                    }
+                }
+            },
             { test: /\.css$/, use: ['style-loader', 'css-loader'] }
         ]
     },

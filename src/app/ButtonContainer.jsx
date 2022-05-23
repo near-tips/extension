@@ -73,14 +73,14 @@ const ButtonContainer = ({ answers }) => {
     }, []);
 
     const handleClick = useCallback(async ({ authorIds, authorNicknames, answerId }) => {
-        const callbackUrl = new URL(window.location.toString());
+        const callbackUrl = new URL(window.location.href);
 
         if (!callbackUrl.hash) {
             callbackUrl.hash = answerId;
         }
 
         if (!isLoggedIn) {
-            loginFromApp(callbackUrl)
+            loginFromApp(callbackUrl.href)
             return;
         }
 

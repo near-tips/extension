@@ -12,11 +12,6 @@
     "default_title": "Near Tips",
     "default_popup": "popup.html"
   },
-  "browser_action": {
-    "default_title": "Near Tips",
-    "default_popup": "popup.html"
-  },
-  "default_locale": "en",
   "background": {
     "service_worker": "js/background.js"
   },
