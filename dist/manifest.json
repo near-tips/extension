@@ -1,6 +1,6 @@
 {
   "name": "Near tips",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "manifest_version": 3,
   "description": "Use NEAR for tipping creators in social networks",
   "icons": {
