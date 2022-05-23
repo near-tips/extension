@@ -7,6 +7,7 @@ export const HELPER_URL = 'https://helper.testnet.near.org';
 export const EXPLORER_URL = 'https://explorer.testnet.near.org';
 
 export const HOST = 'https://api.near-tips.com';
+export const ERROR_LOGS_HOST = 'https://errorbot.near-tips.com';
 
 export const DEFAULT_TIPS_STORAGE_KEY = 'default-tips-storage-key';
 export const DEFAULT_TIPS = '0.3';
