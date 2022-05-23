@@ -1,9 +1,9 @@
-import * as ReactDOM from 'react-dom';
-import * as React from 'react';
+import ReactDOM from 'react-dom';
+import React from 'react';
 import { ToastContainer } from 'react-toastify';
 
 import ButtonContainer from './ButtonContainer';
-import ErrorBoundary from './ErrorBoundary';
+import ErrorBoundary from '../utils/ErrorBoundary';
 
 const getAnswerId = (answer) => {
     let node = answer.parentElement

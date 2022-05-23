@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-import { HOST } from '../constants';
-import logger from '../utils/logger';
+import { HOST } from './constants';
+import logger from './logger';
 
 export default async (nicknames, postId) => {
     try {

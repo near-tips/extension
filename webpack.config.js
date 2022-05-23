@@ -6,9 +6,9 @@ module.exports = {
     devtool: "inline-source-map",
 
     entry: {
-        content: './src/app/content.js',
-        background: './src/app/background.js',
-        popup: './src/ui/popup.jsx',
+        content: './src/content/content.js',
+        background: './src/background/background.js',
+        popup: './src/popup/popup.jsx',
     },
 
     output: {
@@ -17,7 +17,10 @@ module.exports = {
     },
 
     resolve: {
-        extensions: [".js", ".jsx"]
+        extensions: [".js", ".jsx"],
+        alias: {
+            'utils': path.resolve(__dirname, 'src/utils/'),
+        },
     },
 
     module: {

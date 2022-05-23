@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useCallback, useEffect } from 'react';
 
 import logger from '../../utils/logger';
-import { DEFAULT_TIPS_STORAGE_KEY, DEFAULT_TIPS } from '../../constants';
+import { DEFAULT_TIPS_STORAGE_KEY, DEFAULT_TIPS } from '../../utils/constants';
 
 const DefaultTips = () => {
     const [defaultTips, setDefaultTips] = useState(DEFAULT_TIPS);

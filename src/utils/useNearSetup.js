@@ -3,8 +3,8 @@ import * as querystring from 'querystring';
 import { toast } from 'react-toastify';
 
 import logger from '../utils/logger';
-import notify from '../app/notify';
-import { WORKER_METHODS } from '../constants';
+import notify from './notify';
+import { WORKER_METHODS } from './constants';
 import { failureMessage, successMessage } from './messages';
 
 const useNearSetup = () => {

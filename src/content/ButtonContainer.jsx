@@ -1,15 +1,14 @@
-import * as React from 'react';
-import { useCallback, useState, useEffect } from 'react'
-import * as ReactDOM from 'react-dom'
+import React, { useCallback, useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import { toast } from 'react-toastify';
 import * as queryString from 'querystring';
 
 import { successMessage, failureMessage, pendingMessage } from '../utils/messages';
-import { DEFAULT_TIPS_STORAGE_KEY, DEFAULT_TIPS, WORKER_METHODS, LOCAL_STORAGE_KEY } from '../constants';
+import { DEFAULT_TIPS_STORAGE_KEY, DEFAULT_TIPS, WORKER_METHODS, LOCAL_STORAGE_KEY } from '../utils/constants';
 import useNearSetup from '../utils/useNearSetup';
 import logger from '../utils/logger';
 import Button from './Button';
-import notify from './notify';
+import notify from '../utils/notify';
 
 const sendTips = ({ authorIds, tipAmount, callbackUrl }) => {
     return new Promise((resolve, reject) => {

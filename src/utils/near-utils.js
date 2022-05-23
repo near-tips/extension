@@ -9,7 +9,7 @@ import {
     WALLET_URL,
     HELPER_URL,
     EXPLORER_URL,
-} from '../constants';
+} from './constants';
 
 export const DEFAULT_GAS = 300000000000000;
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 
-import { WORKER_METHODS } from "../../constants";
+import { WORKER_METHODS } from "../../utils/constants";
 import logger from '../../utils/logger';
 
 const Deposit = () => {

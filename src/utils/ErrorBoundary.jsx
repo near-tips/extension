@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import logger from '../utils/logger';
+import logger from './logger';
 
 class ErrorBoundary extends React.Component {
     componentDidCatch(error, errorInfo) {
