@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "NODE_ENV=development webpack",
-    "build:prod": "NODE_ENV=production webapck && cp -R ./dist/ ../near-tips/ && ~/../../Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --pack-extension=./dist --pack-extension-key=./dist.pem && cp ./dist.crx ../near-tips && zip -r near-tips.zip ../near-tips"
+    "build:prod": "NODE_ENV=production webpack && cp -R ./dist/ ../near-tips/ && ~/../../Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --pack-extension=./dist --pack-extension-key=./dist.pem && cp ./dist.crx ../near-tips && cd .. && zip -r near-tips.zip ./near-tips/ && cd ./extension"
   },
   "keywords": [],
   "author": "",
